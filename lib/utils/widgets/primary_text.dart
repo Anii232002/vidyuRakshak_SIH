@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PrimaryText extends StatelessWidget {
   final FontWeight weight;
@@ -22,7 +23,7 @@ class PrimaryText extends StatelessWidget {
       text,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(fontWeight: weight, fontSize: size, color: color),
+      style: GoogleFonts.lato(fontWeight: weight, fontSize: size, color: color),
     );
   }
 }
