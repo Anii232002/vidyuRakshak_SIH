@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image/image.dart' as img;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
@@ -7,6 +9,7 @@ import 'package:vidyurakshak_web/utils/enums/map_type_enums.dart';
 import 'package:vidyurakshak_web/utils/screen_utils/screen_sizes.dart';
 import 'package:vidyurakshak_web/utils/theme/app_colors.dart';
 import 'package:vidyurakshak_web/utils/widgets/primary_text.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'modules/dem/ui/dem_model_page.dart';
 
@@ -20,6 +23,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+  final String geoTiffFilePath =
+      'C:\\Users\\Puneet\\Downloads\\clipped_image.tiff';
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(17.1707, 74.6869),
     zoom: 14.4746,
@@ -34,8 +39,25 @@ class _HomePageState extends State<HomePage> {
     DrawerListModel(title: "Logout", icon: Icons.logout),
   ];
 
+  final controller = WebViewController()
+    ..loadRequest(Uri.parse(
+        'https://ee-singhaniruddh30.projects.earthengine.app/view/vidyurakshacarbonemission'));
+
   int _currentIndex = 0;
+  final Set set = {};
   MapTypeEnums _mapTypeEnums = MapTypeEnums.carbon;
+
+  Future<Uint8List> _readImage() async {
+    // Read the GeoTIFF file as bytes
+    ByteData data = await rootBundle.load(geoTiffFilePath);
+    List<int> bytes = data.buffer.asUint8List();
+
+    // Decode the GeoTIFF image
+    img.Image image = img.decodeImage(Uint8List.fromList(bytes))!;
+
+    // Convert the image to a byte array
+    return Uint8List.fromList(img.encodePng(image));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +68,14 @@ class _HomePageState extends State<HomePage> {
             elevation: 0,
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   backgroundImage: AssetImage("assets/profile_icon.png"),
                   radius: 30,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 PrimaryText(
@@ -61,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                     size: 14,
                     color: AppColors.primaryTextColor,
                     text: "Krishna Rao"),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 PrimaryText(
@@ -69,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                     size: 11,
                     color: Colors.grey.withOpacity(0.8),
                     text: "@abhi_navkare"),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 ListTile(
@@ -100,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
@@ -144,30 +166,21 @@ class _HomePageState extends State<HomePage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
-                margin: const EdgeInsets.all(12),
-
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-
-                // color: Colors.white,
-                height: ScreenSizes.screenHeight,
-                child: _mapTypeEnums == MapTypeEnums.dem
-                    ? const ModelViewer(
-                        src: 'assets/power_line_dem.glb',
-                        backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-                        alt: 'A 3D model of an astronaut',
-                        ar: true,
-                        autoRotate: true,
-                      )
-                    : GoogleMap(
-                        mapType: MapType.hybrid,
-                        initialCameraPosition: _kGooglePlex,
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
-                        },
-                      ),
-              ),
+                  margin: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  height: ScreenSizes.screenHeight,
+                  child: _mapTypeEnums == MapTypeEnums.dem
+                      ? const ModelViewer(
+                          src: 'assets/power_line_dem.glb',
+                          backgroundColor:
+                              Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
+                          alt: 'A 3D model of an astronaut',
+                          ar: true,
+                          autoRotate: true,
+                        )
+                      : WebViewWidget(controller: controller)),
             ),
           )
         ],
@@ -186,7 +199,7 @@ class MapContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(2),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
