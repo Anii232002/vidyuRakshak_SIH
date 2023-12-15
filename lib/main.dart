@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
     ScreenSizes().initScreenConstants(context);
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const HomePage(),
     );

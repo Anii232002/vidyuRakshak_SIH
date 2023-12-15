@@ -1,1 +1,1 @@
-enum MapTypeEnums { carbon, sattelite, dem }
+enum PageEnums { carbon, sattelite, dem, map, tasks, dashboard }
