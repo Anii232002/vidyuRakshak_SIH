@@ -1,1 +1,1 @@
-enum PageEnums { carbon, sattelite, dem, map, tasks, dashboard }
+enum PageEnums { carbon, sattelite, dem, map, tasks, dashboard, task_detail }

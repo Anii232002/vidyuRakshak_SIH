@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/dashboard_screen.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/drawer/tasks_scren_drawer.dart';
+import 'package:vidyurakshak_web/modules/dem/ui/task_details.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/tasks_screen.dart';
 import 'package:vidyurakshak_web/utils/enums/map_type_enums.dart';
 import 'package:vidyurakshak_web/utils/screen_utils/screen_sizes.dart';
@@ -69,6 +70,8 @@ class _HomePageState extends State<HomePage> {
         return const TasksScreen();
       case PageEnums.dashboard:
         return const DashboardScreen();
+      case PageEnums.task_detail:
+        return const TaskDetails();
       default:
         return WebViewWidget(controller: controller);
     }
@@ -271,6 +274,32 @@ class _HomePageState extends State<HomePage> {
                                             _mapTypeEnums == PageEnums.dashboard
                                                 ? Colors.white
                                                 : AppColors.primaryTextColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _mapTypeEnums = PageEnums.task_detail;
+                                });
+                              },
+                              child: Container(
+                                height: ScreenSizes.screenHeight! * 0.1,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                color: _mapTypeEnums == PageEnums.task_detail
+                                    ? AppColors.primaryColor
+                                    : Colors.transparent,
+                                child: Center(
+                                  child: Text(
+                                    'Task Detail',
+                                    style: GoogleFonts.lato(
+                                        fontSize: 16,
+                                        color: _mapTypeEnums ==
+                                                PageEnums.task_detail
+                                            ? Colors.white
+                                            : AppColors.primaryTextColor),
                                   ),
                                 ),
                               ),
