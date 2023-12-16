@@ -15,10 +15,10 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
 
   // List of available groups
   List<Map<String, dynamic>> groups = [
-    {'groupNo': 1, 'groupName': 'Gopa', 'id': '123'},
-    {'groupNo': 2, 'groupName': 'Raju', 'id': '456'},
-    {'groupNo': 3, 'groupName': 'Ranga', 'id': '786'},
-    {'groupNo': 4, 'groupName': 'Raju', 'id': '254'},
+    {'groupNo': 1, 'groupName': 'Arjun Seth', 'id': '123'},
+    {'groupNo': 2, 'groupName': 'Akhil Deshmukh', 'id': '456'},
+    {'groupNo': 3, 'groupName': 'Siddhesh Singh', 'id': '786'},
+    {'groupNo': 4, 'groupName': 'Rahul Tiwari', 'id': '254'},
 
     // ... other groups
   ];
