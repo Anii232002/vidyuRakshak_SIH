@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:vidyurakshak_web/utils/screen_utils/screen_sizes.dart';
+import 'package:vidyurakshak_web/utils/theme/app_colors.dart';
 import './marker_model.dart';
 
 class MapViewScreen extends StatefulWidget {
@@ -39,9 +41,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
       child: Stack(children: [
         GoogleMap(
           initialCameraPosition: _sangliRegion,
-          onTap: (latLong) {
-            print(latLong);
-          },
+          onTap: (latLong) {},
           mapType: _mapType,
           markers: _markers,
           onMapCreated: (GoogleMapController controller) {
@@ -50,19 +50,20 @@ class _MapViewScreenState extends State<MapViewScreen> {
           },
         ),
         Positioned(
-            right: 10,
-            top: 30,
-            child: Column(
-              children: [
-                FloatingActionButton(
-                    child: Icon(_mapType == MapType.normal
-                        ? Icons.satellite_alt
-                        : Icons.map),
-                    onPressed: () {
-                      changeMapType();
-                    })
-              ],
-            ))
+          right: 10,
+          top: 30,
+          child: Column(
+            children: [
+              FloatingActionButton(
+                  child: Icon(_mapType == MapType.normal
+                      ? Icons.satellite_alt
+                      : Icons.map),
+                  onPressed: () {
+                    changeMapType();
+                  })
+            ],
+          ),
+        ),
       ]),
     );
   }
