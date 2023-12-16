@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:vidyurakshak_web/modules/dem/model/task_detail_model.dart';
+import 'package:vidyurakshak_web/modules/dem/repository/tasks_repository.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/map/ui/map_view_screen.dart';
+import 'package:vidyurakshak_web/utils/theme/app_colors.dart';
 
 class TaskDetails extends StatefulWidget {
   const TaskDetails({Key? key}) : super(key: key);
@@ -12,6 +16,14 @@ class TaskDetails extends StatefulWidget {
 class _TaskDetailsScreenState extends State<TaskDetails> {
   int selectedGroupIndex = 0; // Index of the selected group
   String selectedPriority = ''; // Store the selected priority
+
+  TextEditingController _titleTextEditingController = TextEditingController();
+  TextEditingController _descriptionTextEditingController =
+      TextEditingController();
+  TextEditingController _latitudeTextEditingController =
+      TextEditingController();
+  TextEditingController _longitudeTextEditingController =
+      TextEditingController();
 
   // List of available groups
   List<Map<String, dynamic>> groups = [
@@ -66,6 +78,7 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                   ),
                   SizedBox(height: 30),
                   TextField(
+                    controller: _titleTextEditingController,
                     decoration: InputDecoration(
                       hintText: 'Title',
                       border: OutlineInputBorder(),
@@ -77,23 +90,64 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                   // b) Description text box
                   TextField(
                     maxLines: 3,
-                    decoration: InputDecoration(
+                    controller: _descriptionTextEditingController,
+                    decoration: const InputDecoration(
                       hintText: 'Description',
                       border: OutlineInputBorder(),
                     ),
                   ),
 
-                  SizedBox(height: 30), // Add spacing between elements
+                  SizedBox(height: 30),
+
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Latitude'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        width: 180,
+                        child: TextField(
+                          controller: _latitudeTextEditingController,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.all(5),
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      const Text('Longitude'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        width: 180,
+                        child: TextField(
+                          controller: _longitudeTextEditingController,
+                          decoration: const InputDecoration(
+                            hintMaxLines: 2,
+                            contentPadding: EdgeInsets.all(5),
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ), // Add spacing between elements
 
                   // c) Priority Buttons
-                  Text(
+                  const Text(
                     'Select priority :',
                     style: TextStyle(
                       fontSize: 18,
-                      color: const Color.fromARGB(255, 33, 0, 0),
+                      color: Color.fromARGB(255, 33, 0, 0),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Wrap(
                     spacing: 10,
                     children: [
@@ -103,14 +157,27 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                     ],
                   ),
 
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Center(
                       child: ElevatedButton(
                     onPressed: () {
-                      // Add functionality here
+                      TasksRepository().addData(
+                        TaskDetailModel(
+                            title: _titleTextEditingController.text,
+                            description: _descriptionTextEditingController.text,
+                            teamAssigned: groups[selectedGroupIndex]
+                                ['groupName'],
+                            latlng: GeoPoint(
+                                double.parse(
+                                    _latitudeTextEditingController.text),
+                                double.parse(
+                                    _longitudeTextEditingController.text)),
+                            priority: selectedPriority),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue, // Change the color as needed
+                      backgroundColor:
+                          AppColors.primaryColor, // Change the color as needed
                       minimumSize: Size(200, 50), // Set width and height
                     ),
                     child: Text(
