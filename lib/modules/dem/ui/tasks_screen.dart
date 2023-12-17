@@ -40,11 +40,21 @@ class _TasksScreenState extends State<TasksScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   }
+                  final querySnaps = snapshot.data!.docs;
+                  querySnaps.sort((a, b) {
+                    int priority1 = a['priority'] == 'high'
+                        ? 2
+                        : (a['priority'] == 'medium' ? 1 : 0);
+                    int priority2 = b['priority'] == 'high'
+                        ? 2
+                        : (b['priority'] == 'medium' ? 1 : 0);
+                    return priority2.compareTo(priority1);
+                  });
                   return Wrap(
                       direction: Axis.horizontal,
                       runSpacing: ScreenSizes.screenHeight! * 0.1,
                       spacing: ScreenSizes.screenWidth! * 0.04,
-                      children: snapshot.data!.docs
+                      children: querySnaps
                           .map((DocumentSnapshot documentSnapshot) {
                             Map<String, dynamic> data = documentSnapshot.data()!
                                 as Map<String, dynamic>;
@@ -93,6 +103,7 @@ class TaskWidget extends StatelessWidget {
     final double longitude = taskDetailModel.location.longitude;
     return Container(
       width: ScreenSizes.screenWidth! * 0.2,
+      height: ScreenSizes.screenHeight! * 0.5,
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

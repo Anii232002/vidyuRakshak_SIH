@@ -152,7 +152,7 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                     spacing: 10,
                     children: [
                       _buildPriorityButton('Low', Colors.green),
-                      _buildPriorityButton('Moderate', Colors.yellow),
+                      _buildPriorityButton('Medium', Colors.yellow),
                       _buildPriorityButton('High', Colors.red),
                     ],
                   ),
@@ -173,7 +173,7 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                                     _latitudeTextEditingController.text),
                                 double.parse(
                                     _longitudeTextEditingController.text)),
-                            priority: selectedPriority),
+                            priority: selectedPriority.toLowerCase()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
