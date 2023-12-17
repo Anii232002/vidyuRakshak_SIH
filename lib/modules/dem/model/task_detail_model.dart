@@ -8,14 +8,15 @@ class TaskDetailModel {
   final GeoPoint location;
   final String priority;
   final bool active;
-  TaskDetailModel({
-    required this.title,
-    required this.active,
-    required this.description,
-    required this.teamAssigned,
-    required this.location,
-    required this.priority,
-  });
+  final String status;
+  TaskDetailModel(
+      {required this.title,
+      required this.active,
+      required this.description,
+      required this.teamAssigned,
+      required this.location,
+      required this.priority,
+      required this.status});
 
   static PriorityEnum getPriority(String priority) {
     switch (priority) {
@@ -36,13 +37,13 @@ class TaskDetailModel {
   ) {
     final data = snapshot.data();
     return TaskDetailModel(
-      title: data?['title'],
-      description: data?['description'],
-      teamAssigned: data?['teamAssigned'],
-      location: data?['location'],
-      priority: data?['priority'],
-      active: data?['active'],
-    );
+        title: data?['title'],
+        description: data?['description'],
+        teamAssigned: data?['teamAssigned'],
+        location: data?['location'],
+        priority: data?['priority'],
+        active: data?['active'],
+        status: data?['status']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -53,6 +54,7 @@ class TaskDetailModel {
       if (teamAssigned != null) "teamAssigned": teamAssigned,
       if (active != null) "active": active,
       if (priority != null) "priority": priority,
+      if (status != null) "status": status
     };
   }
 }
