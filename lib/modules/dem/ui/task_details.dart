@@ -167,7 +167,8 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                             description: _descriptionTextEditingController.text,
                             teamAssigned: groups[selectedGroupIndex]
                                 ['groupName'],
-                            latlng: GeoPoint(
+                            active: true,
+                            location: GeoPoint(
                                 double.parse(
                                     _latitudeTextEditingController.text),
                                 double.parse(

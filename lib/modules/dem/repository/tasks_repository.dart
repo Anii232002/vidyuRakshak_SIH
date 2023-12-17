@@ -19,4 +19,8 @@ class TasksRepository {
       print(e.toString());
     }
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getTaskData() {
+    return db.collection('Tasks').snapshots();
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vidyurakshak_web/utils/theme/app_colors.dart';
 import 'StatusWidget.dart';
 
 class ProfileSection extends StatelessWidget {
@@ -15,7 +16,7 @@ class ProfileSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Colors.blue,
+      color: AppColors.primaryColor,
       padding: EdgeInsets.all(20),
       child: Row(
         children: [
