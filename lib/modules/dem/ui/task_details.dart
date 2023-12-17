@@ -87,7 +87,6 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
 
                   SizedBox(height: 30), // Add spacing between elements
 
-                  // b) Description text box
                   TextField(
                     maxLines: 3,
                     controller: _descriptionTextEditingController,
@@ -173,7 +172,8 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                                     _latitudeTextEditingController.text),
                                 double.parse(
                                     _longitudeTextEditingController.text)),
-                            priority: selectedPriority.toLowerCase()),
+                            priority: selectedPriority.toLowerCase(),
+                            status: 'start'),
                       );
                     },
                     style: ElevatedButton.styleFrom(
