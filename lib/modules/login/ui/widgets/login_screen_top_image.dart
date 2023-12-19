@@ -21,7 +21,7 @@ class LoginScreenTopImage extends StatelessWidget {
             const Spacer(),
             Expanded(
               flex: 2,
-              child: Lottie.asset('assets/images/login.json'),
+              child: Lottie.asset('assets/login.json'),
             ),
             const Spacer(),
           ],

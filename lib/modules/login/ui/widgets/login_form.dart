@@ -1,11 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vidyurakshak_web/home_page.dart';
 import 'package:vidyurakshak_web/modules/login/ui/signup_screen.dart';
 import 'package:vidyurakshak_web/modules/login/ui/widgets/have_account_check.dart';
 import 'package:vidyurakshak_web/utils/theme/app_colors.dart';
 
 class LoginForm extends StatelessWidget {
   final double defaultPadding = 16.0;
-  const LoginForm({
+  final TextEditingController _emailTextEditingController =
+      TextEditingController();
+  final TextEditingController _passwordTextEditingController =
+      TextEditingController();
+
+  LoginForm({
     Key? key,
   }) : super(key: key);
 
@@ -16,6 +23,7 @@ class LoginForm extends StatelessWidget {
         children: [
           TextFormField(
             keyboardType: TextInputType.emailAddress,
+            controller: _emailTextEditingController,
             textInputAction: TextInputAction.next,
             cursorColor: AppColors.primaryColor,
             onSaved: (email) {},
@@ -31,6 +39,7 @@ class LoginForm extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
               textInputAction: TextInputAction.done,
+              controller: _passwordTextEditingController,
               obscureText: true,
               cursorColor: AppColors.primaryColor,
               decoration: InputDecoration(
@@ -44,7 +53,23 @@ class LoginForm extends StatelessWidget {
           ),
           SizedBox(height: defaultPadding),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              try {
+                final credential = await FirebaseAuth.instance
+                    .signInWithEmailAndPassword(
+                        email: _emailTextEditingController.text,
+                        password: _passwordTextEditingController.text);
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => HomePage()));
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'user-not-found') {
+                  print('No user found for that email.');
+                } else if (e.code == 'wrong-password') {
+                  print('Wrong password provided for that user.');
+                }
+              }
+            },
             child: Text(
               "Login".toUpperCase(),
             ),

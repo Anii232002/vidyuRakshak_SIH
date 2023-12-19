@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:vidyurakshak_web/home_page.dart';
+import 'package:vidyurakshak_web/modules/login/ui/welcome_screen.dart';
 import 'package:vidyurakshak_web/utils/screen_utils/screen_sizes.dart';
 import 'package:vidyurakshak_web/utils/theme/app_theme.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomePage(),
+      home: const WelcomeScreen(),
     );
   }
 }

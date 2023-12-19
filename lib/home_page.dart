@@ -180,30 +180,36 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _mapTypeEnums = PageEnums.height_map;
-                            });
-                          },
-                          child: MapContainerWidget(
-                              imageLoc: 'assets/height_image.png',
-                              selected: _mapTypeEnums == PageEnums.height_map,
-                              name: 'Height Map'),
+                        Visibility(
+                          visible: false,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _mapTypeEnums = PageEnums.height_map;
+                              });
+                            },
+                            child: MapContainerWidget(
+                                imageLoc: 'assets/height_image.png',
+                                selected: _mapTypeEnums == PageEnums.height_map,
+                                name: 'Height Map'),
+                          ),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _mapTypeEnums = PageEnums.modis;
-                            });
-                          },
-                          child: MapContainerWidget(
-                            imageLoc: 'assets/modis_image.png',
-                            selected: _mapTypeEnums == PageEnums.modis,
-                            name: 'vegetation Classification',
+                        Visibility(
+                          visible: false,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _mapTypeEnums = PageEnums.modis;
+                              });
+                            },
+                            child: MapContainerWidget(
+                              imageLoc: 'assets/modis_image.png',
+                              selected: _mapTypeEnums == PageEnums.modis,
+                              name: 'vegetation Classification',
+                            ),
                           ),
                         ),
 
@@ -280,53 +286,60 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _mapTypeEnums = PageEnums.tasks;
-                                });
-                              },
-                              child: Container(
-                                height: ScreenSizes.screenHeight! * 0.1,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                color: _mapTypeEnums == PageEnums.tasks
-                                    ? AppColors.primaryColor
-                                    : Colors.transparent,
-                                child: Center(
-                                  child: Text(
-                                    'Tasks',
-                                    style: GoogleFonts.lato(
-                                        fontSize: 16,
-                                        color: _mapTypeEnums == PageEnums.tasks
-                                            ? Colors.white
-                                            : AppColors.primaryTextColor),
+                            Visibility(
+                              visible: false,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _mapTypeEnums = PageEnums.tasks;
+                                  });
+                                },
+                                child: Container(
+                                  height: ScreenSizes.screenHeight! * 0.1,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  color: _mapTypeEnums == PageEnums.tasks
+                                      ? AppColors.primaryColor
+                                      : Colors.transparent,
+                                  child: Center(
+                                    child: Text(
+                                      'Tasks',
+                                      style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          color:
+                                              _mapTypeEnums == PageEnums.tasks
+                                                  ? Colors.white
+                                                  : AppColors.primaryTextColor),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _mapTypeEnums = PageEnums.dashboard;
-                                });
-                              },
-                              child: Container(
-                                height: ScreenSizes.screenHeight! * 0.1,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                color: _mapTypeEnums == PageEnums.dashboard
-                                    ? AppColors.primaryColor
-                                    : Colors.transparent,
-                                child: Center(
-                                  child: Text(
-                                    'Dashboard',
-                                    style: GoogleFonts.lato(
-                                        fontSize: 16,
-                                        color:
-                                            _mapTypeEnums == PageEnums.dashboard
-                                                ? Colors.white
-                                                : AppColors.primaryTextColor),
+                            Visibility(
+                              visible: false,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _mapTypeEnums = PageEnums.dashboard;
+                                  });
+                                },
+                                child: Container(
+                                  height: ScreenSizes.screenHeight! * 0.1,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  color: _mapTypeEnums == PageEnums.dashboard
+                                      ? AppColors.primaryColor
+                                      : Colors.transparent,
+                                  child: Center(
+                                    child: Text(
+                                      'Dashboard',
+                                      style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          color: _mapTypeEnums ==
+                                                  PageEnums.dashboard
+                                              ? Colors.white
+                                              : AppColors.primaryTextColor),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -360,7 +373,10 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               width: 40,
                             ),
-                            Icon(Icons.more_vert)
+                            GestureDetector(
+                              child: Icon(Icons.more_vert),
+                              onTap: () {},
+                            )
                           ],
                         )
                       ],
