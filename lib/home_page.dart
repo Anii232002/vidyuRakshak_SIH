@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image/image.dart' as img;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/dashboard_screen.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/drawer/tasks_scren_drawer.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/task_details.dart';
@@ -58,6 +61,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final Set set = {};
   PageEnums _mapTypeEnums = PageEnums.carbon;
+  final ScreenshotController screenshotController = ScreenshotController();
 
   Future<Uint8List> _readImage() async {
     ByteData data = await rootBundle.load(geoTiffFilePath);
@@ -92,311 +96,337 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          (_mapTypeEnums == PageEnums.carbon ||
-                  _mapTypeEnums == PageEnums.dem ||
-                  _mapTypeEnums == PageEnums.height_map ||
-                  _mapTypeEnums == PageEnums.modis)
-              ? Drawer(
-                  elevation: 0,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const CircleAvatar(
-                          backgroundImage:
-                              AssetImage("assets/profile_icon.png"),
-                          radius: 30,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        PrimaryText(
-                            weight: FontWeight.bold,
-                            size: 14,
-                            color: AppColors.primaryTextColor,
-                            text: "Krishna Rao"),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        PrimaryText(
-                            weight: FontWeight.normal,
-                            size: 11,
-                            color: Colors.grey.withOpacity(0.8),
-                            text: "@abhi_navkare"),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ListTile(
-                          leading: Icon(drawerList[0].icon,
-                              color: AppColors.primaryColor),
-                          title: PrimaryText(
+      body: Screenshot(
+        controller: screenshotController,
+        child: Row(
+          children: [
+            (_mapTypeEnums == PageEnums.carbon ||
+                    _mapTypeEnums == PageEnums.dem ||
+                    _mapTypeEnums == PageEnums.height_map ||
+                    _mapTypeEnums == PageEnums.modis)
+                ? Drawer(
+                    elevation: 0,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const CircleAvatar(
+                            backgroundImage:
+                                AssetImage("assets/profile_icon.png"),
+                            radius: 30,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PrimaryText(
                               weight: FontWeight.bold,
-                              size: 16,
+                              size: 14,
                               color: AppColors.primaryTextColor,
-                              text: drawerList[0].title),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Map types',
-                          style: GoogleFonts.lato(
-                            fontSize: 18,
+                              text: "Krishna Rao"),
+                          const SizedBox(
+                            height: 5,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _mapTypeEnums = PageEnums.dem;
-                            });
-                          },
-                          child: MapContainerWidget(
-                              imageLoc: 'assets/dem_img.png',
-                              selected: _mapTypeEnums == PageEnums.dem,
-                              name: '3D model'),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _mapTypeEnums = PageEnums.carbon;
-                            });
-                          },
-                          child: MapContainerWidget(
-                              imageLoc: 'assets/carbon_map.png',
-                              selected: _mapTypeEnums == PageEnums.carbon,
-                              name: 'Risk Assessment'),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Visibility(
-                          visible: false,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _mapTypeEnums = PageEnums.height_map;
-                              });
-                            },
-                            child: MapContainerWidget(
-                                imageLoc: 'assets/height_image.png',
-                                selected: _mapTypeEnums == PageEnums.height_map,
-                                name: 'Height Map'),
+                          PrimaryText(
+                              weight: FontWeight.normal,
+                              size: 11,
+                              color: Colors.grey.withOpacity(0.8),
+                              text: "@abhi_navkare"),
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Visibility(
-                          visible: false,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _mapTypeEnums = PageEnums.modis;
-                              });
-                            },
-                            child: MapContainerWidget(
-                              imageLoc: 'assets/modis_image.png',
-                              selected: _mapTypeEnums == PageEnums.modis,
-                              name: 'vegetation Classification',
+                          ListTile(
+                            leading: Icon(drawerList[0].icon,
+                                color: AppColors.primaryColor),
+                            title: PrimaryText(
+                                weight: FontWeight.bold,
+                                size: 16,
+                                color: AppColors.primaryTextColor,
+                                text: drawerList[0].title),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Map types',
+                            style: GoogleFonts.lato(
+                              fontSize: 18,
                             ),
                           ),
-                        ),
+                          const SizedBox(
+                            height: 20,
+                          ),
 
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       _mapTypeEnums = PageEnums.dem;
-                        //     });
-                        //   },
-                        //   child: MapContainerWidget(
-                        //     imageLoc: 'assets/dem_img.png',
-                        //     selected: _mapTypeEnums == PageEnums.dem,
-                        //   ),
-                        // )
-                      ],
-                    ),
-                  ),
-                )
-              : const TasksScreenDrawer(),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    height: ScreenSizes.screenHeight! * 0.08,
-                    width: ScreenSizes.screenWidth! - 100,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'VidyuRakshak',
-                          style: GoogleFonts.lato(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        Row(
-                          children: [
-                            GestureDetector(
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _mapTypeEnums = PageEnums.dem;
+                              });
+                            },
+                            child: MapContainerWidget(
+                                imageLoc: 'assets/dem_img.png',
+                                selected: _mapTypeEnums == PageEnums.dem,
+                                name: '3D model'),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _mapTypeEnums = PageEnums.carbon;
+                              });
+                            },
+                            child: MapContainerWidget(
+                                imageLoc: 'assets/carbon_map.png',
+                                selected: _mapTypeEnums == PageEnums.carbon,
+                                name: 'Risk Assessment'),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Visibility(
+                            visible: true,
+                            child: GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  _mapTypeEnums = PageEnums.carbon;
+                                  _mapTypeEnums = PageEnums.height_map;
                                 });
                               },
-                              child: Container(
-                                height: ScreenSizes.screenHeight! * 0.1,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                color: _mapTypeEnums == PageEnums.carbon ||
-                                        _mapTypeEnums == PageEnums.dem ||
-                                        _mapTypeEnums == PageEnums.modis ||
-                                        _mapTypeEnums == PageEnums.height_map
-                                    ? AppColors.primaryColor
-                                    : Colors.transparent,
-                                child: Center(
-                                  child: Text(
-                                    'Map',
-                                    style: GoogleFonts.lato(
-                                        fontSize: 16,
-                                        color:
-                                            _mapTypeEnums == PageEnums.carbon ||
-                                                    _mapTypeEnums ==
-                                                        PageEnums.dem ||
-                                                    _mapTypeEnums ==
-                                                        PageEnums.modis ||
-                                                    _mapTypeEnums ==
-                                                        PageEnums.height_map
-                                                ? Colors.white
-                                                : AppColors.primaryTextColor),
-                                  ),
-                                ),
+                              child: MapContainerWidget(
+                                  imageLoc: 'assets/height_image.png',
+                                  selected:
+                                      _mapTypeEnums == PageEnums.height_map,
+                                  name: 'Height Map'),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Visibility(
+                            visible: true,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _mapTypeEnums = PageEnums.modis;
+                                });
+                              },
+                              child: MapContainerWidget(
+                                imageLoc: 'assets/modis_image.png',
+                                selected: _mapTypeEnums == PageEnums.modis,
+                                name: 'vegetation Classification',
                               ),
                             ),
-                            Visibility(
-                              visible: false,
-                              child: GestureDetector(
+                          ),
+
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     setState(() {
+                          //       _mapTypeEnums = PageEnums.dem;
+                          //     });
+                          //   },
+                          //   child: MapContainerWidget(
+                          //     imageLoc: 'assets/dem_img.png',
+                          //     selected: _mapTypeEnums == PageEnums.dem,
+                          //   ),
+                          // )
+                        ],
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      height: ScreenSizes.screenHeight! * 0.08,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              // final imageFile =
+                              //     await screenshotController.capture();
+                              // // File file = File();
+                              // // await file
+                              // //     .writeAsBytes(imageFile!.buffer.asInt8List());
+                              // // final inputImage = InputImage.fromFile(file);
+                              // final textDetector =
+                              //     GoogleMlKit.vision.textRecognizer();
+
+                              // final RecognizedText recognizedText =
+                              //     await textDetector.processImage(inputImage);
+                              // String text = '';
+                              // for (TextBlock block in recognizedText.blocks) {
+                              //   for (TextLine line in block.lines) {
+                              //     text += line.text + '\n';
+                              //   }
+                              // }
+
+                              // print(text);
+                            },
+                            child: Text(
+                              'VidyuRakshak',
+                              style: GoogleFonts.lato(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    _mapTypeEnums = PageEnums.tasks;
+                                    _mapTypeEnums = PageEnums.carbon;
                                   });
                                 },
                                 child: Container(
                                   height: ScreenSizes.screenHeight! * 0.1,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
-                                  color: _mapTypeEnums == PageEnums.tasks
+                                  color: _mapTypeEnums == PageEnums.carbon ||
+                                          _mapTypeEnums == PageEnums.dem ||
+                                          _mapTypeEnums == PageEnums.modis ||
+                                          _mapTypeEnums == PageEnums.height_map
                                       ? AppColors.primaryColor
                                       : Colors.transparent,
                                   child: Center(
                                     child: Text(
-                                      'Tasks',
-                                      style: GoogleFonts.lato(
-                                          fontSize: 16,
-                                          color:
-                                              _mapTypeEnums == PageEnums.tasks
-                                                  ? Colors.white
-                                                  : AppColors.primaryTextColor),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: false,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _mapTypeEnums = PageEnums.dashboard;
-                                  });
-                                },
-                                child: Container(
-                                  height: ScreenSizes.screenHeight! * 0.1,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  color: _mapTypeEnums == PageEnums.dashboard
-                                      ? AppColors.primaryColor
-                                      : Colors.transparent,
-                                  child: Center(
-                                    child: Text(
-                                      'Dashboard',
+                                      'Map',
                                       style: GoogleFonts.lato(
                                           fontSize: 16,
                                           color: _mapTypeEnums ==
-                                                  PageEnums.dashboard
+                                                      PageEnums.carbon ||
+                                                  _mapTypeEnums ==
+                                                      PageEnums.dem ||
+                                                  _mapTypeEnums ==
+                                                      PageEnums.modis ||
+                                                  _mapTypeEnums ==
+                                                      PageEnums.height_map
                                               ? Colors.white
                                               : AppColors.primaryTextColor),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _mapTypeEnums = PageEnums.task_detail;
-                                });
-                              },
-                              child: Container(
-                                height: ScreenSizes.screenHeight! * 0.1,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                color: _mapTypeEnums == PageEnums.task_detail
-                                    ? AppColors.primaryColor
-                                    : Colors.transparent,
-                                child: Center(
-                                  child: Text(
-                                    'Task Detail',
-                                    style: GoogleFonts.lato(
-                                        fontSize: 16,
-                                        color: _mapTypeEnums ==
-                                                PageEnums.task_detail
-                                            ? Colors.white
-                                            : AppColors.primaryTextColor),
+                              Visibility(
+                                visible: true,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _mapTypeEnums = PageEnums.tasks;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: ScreenSizes.screenHeight! * 0.1,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    color: _mapTypeEnums == PageEnums.tasks
+                                        ? AppColors.primaryColor
+                                        : Colors.transparent,
+                                    child: Center(
+                                      child: Text(
+                                        'Tasks',
+                                        style: GoogleFonts.lato(
+                                            fontSize: 16,
+                                            color: _mapTypeEnums ==
+                                                    PageEnums.tasks
+                                                ? Colors.white
+                                                : AppColors.primaryTextColor),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 40,
-                            ),
-                            GestureDetector(
-                              child: Icon(Icons.more_vert),
-                              onTap: () {},
-                            )
-                          ],
-                        )
-                      ],
+                              Visibility(
+                                visible: true,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _mapTypeEnums = PageEnums.dashboard;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: ScreenSizes.screenHeight! * 0.1,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    color: _mapTypeEnums == PageEnums.dashboard
+                                        ? AppColors.primaryColor
+                                        : Colors.transparent,
+                                    child: Center(
+                                      child: Text(
+                                        'Dashboard',
+                                        style: GoogleFonts.lato(
+                                            fontSize: 16,
+                                            color: _mapTypeEnums ==
+                                                    PageEnums.dashboard
+                                                ? Colors.white
+                                                : AppColors.primaryTextColor),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _mapTypeEnums = PageEnums.task_detail;
+                                  });
+                                },
+                                child: Container(
+                                  height: ScreenSizes.screenHeight! * 0.1,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  color: _mapTypeEnums == PageEnums.task_detail
+                                      ? AppColors.primaryColor
+                                      : Colors.transparent,
+                                  child: Center(
+                                    child: Text(
+                                      'Task Detail',
+                                      style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          color: _mapTypeEnums ==
+                                                  PageEnums.task_detail
+                                              ? Colors.white
+                                              : AppColors.primaryTextColor),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              ),
+                              GestureDetector(
+                                child: Icon(Icons.more_vert),
+                                onTap: () {},
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                        margin: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        height: ScreenSizes.screenHeight,
-                        child: getScreenContent(_mapTypeEnums)),
-                  ),
-                ],
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                          margin: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          height: ScreenSizes.screenHeight,
+                          child: getScreenContent(_mapTypeEnums)),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
