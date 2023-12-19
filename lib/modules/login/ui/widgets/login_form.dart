@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vidyurakshak_web/home_page.dart';
 import 'package:vidyurakshak_web/modules/login/ui/signup_screen.dart';
 import 'package:vidyurakshak_web/modules/login/ui/widgets/have_account_check.dart';
+import 'package:vidyurakshak_web/utils/screen_utils/screen_sizes.dart';
 import 'package:vidyurakshak_web/utils/theme/app_colors.dart';
 
 class LoginForm extends StatelessWidget {
@@ -28,10 +29,20 @@ class LoginForm extends StatelessWidget {
             cursorColor: AppColors.primaryColor,
             onSaved: (email) {},
             decoration: InputDecoration(
+              iconColor: AppColors.primaryColor.withOpacity(0.5),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: AppColors.primaryColor.withOpacity(0.5))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: AppColors.primaryColor, width: 2)),
               hintText: "Your email",
               prefixIcon: Padding(
                 padding: EdgeInsets.all(defaultPadding),
-                child: Icon(Icons.person),
+                child: Icon(
+                  Icons.person,
+                  color: AppColors.primaryColor.withOpacity(0.5),
+                ),
               ),
             ),
           ),
@@ -44,34 +55,52 @@ class LoginForm extends StatelessWidget {
               cursorColor: AppColors.primaryColor,
               decoration: InputDecoration(
                 hintText: "Your password",
+                iconColor: AppColors.primaryColor.withOpacity(0.5),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: AppColors.primaryColor.withOpacity(0.5))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: AppColors.primaryColor, width: 2)),
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(defaultPadding),
-                  child: Icon(Icons.lock),
+                  child: Icon(
+                    Icons.lock,
+                    color: AppColors.primaryColor.withOpacity(0.5),
+                  ),
                 ),
               ),
             ),
           ),
           SizedBox(height: defaultPadding),
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                final credential = await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                        email: _emailTextEditingController.text,
-                        password: _passwordTextEditingController.text);
+          SizedBox(
+            width: ScreenSizes.screenWidth! * 0.2,
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25))),
+              onPressed: () async {
+                try {
+                  final credential = await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: _emailTextEditingController.text,
+                          password: _passwordTextEditingController.text);
 
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => HomePage()));
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'user-not-found') {
-                  print('No user found for that email.');
-                } else if (e.code == 'wrong-password') {
-                  print('Wrong password provided for that user.');
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'user-not-found') {
+                    print('No user found for that email.');
+                  } else if (e.code == 'wrong-password') {
+                    print('Wrong password provided for that user.');
+                  }
                 }
-              }
-            },
-            child: Text(
-              "Login".toUpperCase(),
+              },
+              child: Text(
+                "Login".toUpperCase(),
+              ),
             ),
           ),
           SizedBox(height: defaultPadding),

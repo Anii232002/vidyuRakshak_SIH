@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginScreenTopImage extends StatelessWidget {
@@ -11,9 +12,9 @@ class LoginScreenTopImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text(
+        Text(
           "LOGIN",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          style: GoogleFonts.lato(fontWeight: FontWeight.w700, fontSize: 45),
         ),
         SizedBox(height: defaultPadding * 2),
         Row(
