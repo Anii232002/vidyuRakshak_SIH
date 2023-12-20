@@ -68,7 +68,8 @@ class _TasksScreenState extends State<TasksScreen> {
                                   teamAssigned: data['teamAssigned'],
                                   location: data['location'],
                                   priority: data['priority'],
-                                  status: data['status']),
+                                  status: data['status'],
+                                  id: data['id']),
                             );
                           })
                           .toList()
