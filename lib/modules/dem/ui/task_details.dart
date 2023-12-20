@@ -1,13 +1,21 @@
+// import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:vidyurakshak_web/modules/dem/model/TaskModel.dart';
 import 'package:vidyurakshak_web/modules/dem/model/task_detail_model.dart';
 import 'package:vidyurakshak_web/modules/dem/repository/tasks_repository.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/map/ui/map_view_screen.dart';
 import 'package:vidyurakshak_web/utils/theme/app_colors.dart';
+import 'package:vidyurakshak_web/modules/dem/ui/AlertScreen.dart';
+import 'package:vidyurakshak_web/modules/dem/model/task_detail_model.dart';
 
 class TaskDetails extends StatefulWidget {
-  const TaskDetails({Key? key}) : super(key: key);
+  final Task task;
+  final Color color;
+
+  TaskDetails({required this.task, required this.color});
 
   @override
   State<TaskDetails> createState() => _TaskDetailsScreenState();
@@ -37,6 +45,27 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
 
   @override
   Widget build(BuildContext context) {
+    var lats = 74.1615;
+    var longs = 14.1390;
+
+    var priority = 'high';
+    if (widget.task.isNew == 0) {
+      var ans_1 = widget.task.lat.toString();
+      _latitudeTextEditingController.text = ans_1;
+
+      var ans_2 = widget.task.lon.toString();
+      _longitudeTextEditingController.text = ans_2;
+      // _longitudeTextEditingController.text = widget.task.lon as String;
+      if (widget.task.priority == 1) {
+        selectedPriority = 'High';
+      } else {
+        selectedPriority = 'Medium';
+      }
+
+      lats = widget.task.lat;
+      longs = widget.task.lon;
+      priority = selectedPriority;
+    }
     return Scaffold(
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +102,23 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                     child: SizedBox(
                       width: 800, // Set the desired width
                       height: 200, // Set the desired height
-                      child: MapViewScreen(), // Your placeholder widget
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            lats,
+                            longs,
+                          ),
+                          zoom: 14.4746,
+                        ),
+                        markers: <Marker>[
+                          Marker(
+                            markerId: MarkerId('marker1'),
+                            position: LatLng(lats, longs),
+                            infoWindow: InfoWindow(
+                                title: 'Priority: ${selectedPriority}'),
+                          ),
+                        ].toSet(),
+                      ), // Your placeholder widget
                     ), // Replace Placeholder with your image widget
                   ),
                   SizedBox(height: 30),
@@ -173,7 +218,8 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
                                 double.parse(
                                     _longitudeTextEditingController.text)),
                             priority: selectedPriority.toLowerCase(),
-                            status: 'start'),
+                            status: 'start',
+                            id: ''),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -287,6 +333,7 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
 
   // Helper method to create priority buttons
   Widget _buildPriorityButton(String priority, Color color) {
+    bool isSelected = selectedPriority == priority;
     return ElevatedButton(
       onPressed: () {
         setState(() {
@@ -294,16 +341,29 @@ class _TaskDetailsScreenState extends State<TaskDetails> {
         });
       },
       style: ElevatedButton.styleFrom(
-        primary: color,
+        primary: isSelected ? Colors.white : color,
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        side: BorderSide(
+          color: isSelected
+              ? color
+              : Colors.transparent, // Border color for selected button
+          width: 2, // Border width for selected button
+        ),
       ),
-      child: Text(priority),
+      child: Text(
+        priority,
+        style: TextStyle(
+          color: isSelected
+              ? color
+              : Colors.white, // Text color for selected button
+        ),
+      ),
     );
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: TaskDetails(),
-  ));
-}
+// void main() {
+//   runApp(MaterialApp(
+//     home: TaskDetails(),
+//   ));
+// }

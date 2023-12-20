@@ -7,5 +7,7 @@ enum PageEnums {
   dashboard,
   task_detail,
   height_map,
-  modis
+  modis,
+  screenshots,
+  alert
 }

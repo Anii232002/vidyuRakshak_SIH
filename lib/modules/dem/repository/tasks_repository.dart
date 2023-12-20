@@ -13,7 +13,7 @@ class TasksRepository {
             toFirestore: (TaskDetailModel taskDetailModel, options) =>
                 taskDetailModel.toFirestore(),
           );
-
+      taskDetailModel.id = docRef.id;
       await docRef.add(taskDetailModel);
     } catch (e) {
       print(e.toString());

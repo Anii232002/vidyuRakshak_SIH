@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:vidyurakshak_web/modules/dem/model/TaskModel.dart';
+import 'package:vidyurakshak_web/modules/dem/ui/AlertScreen.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/dashboard_screen.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/drawer/tasks_scren_drawer.dart';
 import 'package:vidyurakshak_web/modules/dem/ui/task_details.dart';
@@ -73,6 +75,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getScreenContent(PageEnums pageEnum) {
+    var t = Task(lat: 0, lon: 0, priority: 0, placeName: '', isNew: 1);
     switch (pageEnum) {
       case PageEnums.carbon:
         return WebViewWidget(controller: controller_carbon);
@@ -83,7 +86,9 @@ class _HomePageState extends State<HomePage> {
       case PageEnums.dashboard:
         return const DashboardScreen();
       case PageEnums.task_detail:
-        return const TaskDetails();
+        return TaskDetails(task: t, color: Colors.red);
+      case PageEnums.alert:
+        return AlertZonesScreen();
       case PageEnums.height_map:
         return WebViewWidget(controller: controller_height_map);
       case PageEnums.modis:
@@ -315,6 +320,32 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _mapTypeEnums = PageEnums.alert;
+                                  });
+                                },
+                                child: Container(
+                                  height: ScreenSizes.screenHeight! * 0.1,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  color: _mapTypeEnums == PageEnums.alert
+                                      ? AppColors.primaryColor
+                                      : Colors.transparent,
+                                  child: Center(
+                                    child: Text(
+                                      'Alert Zones',
+                                      style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          color:
+                                              _mapTypeEnums == PageEnums.alert
+                                                  ? Colors.white
+                                                  : AppColors.primaryTextColor),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               Visibility(
                                 visible: true,
                                 child: GestureDetector(
@@ -388,7 +419,7 @@ class _HomePageState extends State<HomePage> {
                                       : Colors.transparent,
                                   child: Center(
                                     child: Text(
-                                      'Task Detail',
+                                      'Task Assign',
                                       style: GoogleFonts.lato(
                                           fontSize: 16,
                                           color: _mapTypeEnums ==

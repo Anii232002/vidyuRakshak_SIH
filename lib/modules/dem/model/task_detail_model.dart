@@ -9,6 +9,8 @@ class TaskDetailModel {
   final String priority;
   final bool active;
   final String status;
+  String id;
+
   TaskDetailModel(
       {required this.title,
       required this.active,
@@ -16,7 +18,12 @@ class TaskDetailModel {
       required this.teamAssigned,
       required this.location,
       required this.priority,
-      required this.status});
+      required this.status,
+      required this.id});
+
+  static setId(TaskDetailModel tdm, id) {
+    tdm.id = id;
+  }
 
   static PriorityEnum getPriority(String priority) {
     switch (priority) {
@@ -43,7 +50,8 @@ class TaskDetailModel {
         location: data?['location'],
         priority: data?['priority'],
         active: data?['active'],
-        status: data?['status']);
+        status: data?['status'],
+        id: data?['id']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -54,7 +62,8 @@ class TaskDetailModel {
       if (teamAssigned != null) "teamAssigned": teamAssigned,
       if (active != null) "active": active,
       if (priority != null) "priority": priority,
-      if (status != null) "status": status
+      if (status != null) "status": status,
+      if (id != null) "id": id
     };
   }
 }
