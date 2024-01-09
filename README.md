@@ -1,7 +1,10 @@
 # vidyurakshak_web
 
-The Website will be used by the regional head and the mobile app will be used by Ground workers
+VidyuRakshak is a Smart India Hackathon 2023 Winner Project . The motive of the project is to measure vegetation height near powerline corridors using satellite imagery.
+The project is built using flutter. Firebase is used as backend. 
+There are two parts of VidyuRakshak, the mobile and the web app.The Website will be used by the regional head and the mobile app will be used by Ground workers
 
+Snapshots of Website:
 
 ![Screenshot (125)](https://github.com/Anii232002/vidyuRakshak_SIH/assets/90499826/ef597530-d7b9-44bd-a751-b00ac0398e0d)
 ![Screenshot (126)](https://github.com/Anii232002/vidyuRakshak_SIH/assets/90499826/da3091db-14bd-4ae2-853b-8964085c22ab)
